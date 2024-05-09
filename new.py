@@ -6,104 +6,95 @@ password = dotenv.get_key('.env', 'DB_PASSWORD')
 dsn = "172.16.64.222:1522/orclpdb"
 
 
-try:
-    global connection
-    connection = cx_Oracle.connect(user=username, password=password, dsn=dsn)
-    print("Connection to Oracle database established successfully.")
-except cx_Oracle.DatabaseError as e:
-    print("Error connecting to Oracle database:", e)
 
 def disconnect_from_database(connection):
     """Closes the connection to the Oracle database."""
     connection.close()
 
-def execute_sql_query(connection, query):
+def execute_sql_query( query):
+    connection = cx_Oracle.connect(user=username, password=password, dsn=dsn)
+
     """Executes an SQL query and returns the result."""
     cursor = connection.cursor()
     print(query)
     cursor.execute(query)
     rows = cursor.fetchall()
     cursor.close()
+    disconnect_from_database(connection)
     return rows
 
-def execute_sql_statement(connection, statement):
+def execute_sql_statement( statement):
+    connection = cx_Oracle.connect(user=username, password=password, dsn=dsn)
+
     """Executes an SQL statement."""
     print(statement)
     cursor = connection.cursor()
     cursor.execute(statement)
     cursor.close()
+    disconnect_from_database(connection)
     connection.commit()
 
-def get_teams(connection):
+def get_teams():
     """Retrieves all teams from the database."""
     query = "SELECT * FROM TEAM"
-    teams = execute_sql_query(connection, query)
-    disconnect_from_database(connection)
+    teams = execute_sql_query( query)
     return teams
 
-def get_members(connection):
+def get_members():
     """Retrieves all members from the database."""
     query = "SELECT * FROM MEMBER"
-    members = execute_sql_query(connection, query)
-    disconnect_from_database(connection)
+    members = execute_sql_query( query)
     return members
 
-def get_mentor_scoring(connection):
+def get_mentor_scoring():
     """Retrieves mentor scoring data from the database."""
     query = "SELECT * FROM MENTOR_SCORES"
-    mentor_scores = execute_sql_query(connection, query)
-    disconnect_from_database(connection)
+    mentor_scores = execute_sql_query( query)
     return mentor_scores
 
-def get_judge_scoring(connection):
+def get_judge_scoring():
     """Retrieves judge scoring data from the database."""
     query = "SELECT * FROM JUDGE_SCORES"
-    judge_scores = execute_sql_query(connection, query)
+    judge_scores = execute_sql_query( query)
     return judge_scores
 
-def get_final_scores(connection):
+def get_final_scores():
     """Retrieves final scores from the database."""
     query = "SELECT * FROM FINAL_SCORESHEETS"
-    final_scores = execute_sql_query(connection, query)
-    disconnect_from_database(connection)
+    final_scores = execute_sql_query( query)
     return final_scores
 
-def get_team_submission(connection):
+def get_team_submission():
     """Retrieves team submissions from the database."""
     query = "SELECT * FROM SUBMISSIONS"
-    submissions = execute_sql_query(connection, query)
-    disconnect_from_database(connection)
+    submissions = execute_sql_query( query)
     return submissions
 
-def get_extensions(connection):
+def get_extensions():
     """Retrieves extension board allocations from the database."""
     query = "SELECT * FROM EXTENTION_BOARD_ALLOCATION"
-    extensions = execute_sql_query(connection, query)
-    disconnect_from_database(connection)
+    extensions = execute_sql_query( query)
     return extensions
 
-def get_checkin(connection):
+def get_checkin():
     """Retrieves check-in data from the database."""
     query = "SELECT * FROM CHECK_INTIME"
-    checkin = execute_sql_query(connection, query)
-    disconnect_from_database(connection)
+    checkin = execute_sql_query( query)
     return checkin
 
 def get_mentors():
     """Retrieves mentors from the database."""
     query = "SELECT * FROM MENTORS"
-    mentors = execute_sql_query(connection, query)
-    disconnect_from_database(connection)
+    mentors = execute_sql_query( query)
     return mentors
 
 def get_judges():
     """Retrieves judges from the database."""
     query = "SELECT * FROM JUDGES"
-    judges = execute_sql_query(connection, query)
-    disconnect_from_database(connection)
+    judges = execute_sql_query( query)
     return judges
 
-def put_team(connection,team_name):
+def put_team(team_name):
     """Inserts a new team into the database."""
     statement = f"""
         BEGIN
@@ -111,10 +102,9 @@ def put_team(connection,team_name):
         END;
         
     """
-    execute_sql_statement(connection, statement)
-    disconnect_from_database(connection)
+    execute_sql_statement( statement)
 
-def put_member(connection,member_name, email, college_name, ph_no, team_id):
+def put_member(member_name, email, college_name, ph_no, team_id):
     """Inserts a new member into the database."""
     statement = f"""
     
@@ -123,22 +113,20 @@ def put_member(connection,member_name, email, college_name, ph_no, team_id):
         END;
     
     """
-    execute_sql_statement(connection, statement)
-    disconnect_from_database(connection)
+    execute_sql_statement( statement)
+    disconnect_from_database()
 
-def put_mentor(connection,mentor_id, mentor_name, mentor_ph):
+def put_mentor(mentor_id, mentor_name, mentor_ph):
     """Inserts a new mentor into the database."""
     statement = f"INSERT INTO MENTORS (Mentor_Id, Mentor_Name, Mentor_Ph) VALUES ({mentor_id}, '{mentor_name}', '{mentor_ph}')"
-    execute_sql_statement(connection, statement)
-    disconnect_from_database(connection)
+    execute_sql_statement( statement)
 
-def put_judge(connection,judge_id, judge_name):
+def put_judge(judge_id, judge_name):
     """Inserts a new judge into the database."""
     statement = f"INSERT INTO JUDGES (Judge_Id, Judge_Name) VALUES ({judge_id}, '{judge_name}')"
-    execute_sql_statement(connection, statement)
-    disconnect_from_database(connection)
+    execute_sql_statement( statement)
 
-def put_checkin(connection,member_id):
+def put_checkin(member_id):
     """Inserts a check-in record for a member into the database."""
     statement = f"""
     
@@ -147,18 +135,16 @@ def put_checkin(connection,member_id):
         END;
     
     """
-    execute_sql_statement(connection, statement)
-    disconnect_from_database(connection)
+    execute_sql_statement( statement)
 
-def put_extension(connection,extention_board_no, team_id):
+def put_extension(extention_board_no, team_id):
     """Inserts an extension board allocation into the database."""
 
     statement = f"INSERT INTO extention_Board_Allocation VALUES({extention_board_no},{team_id});"
 
-    execute_sql_statement(connection, statement)
-    disconnect_from_database(connection)
+    execute_sql_statement( statement)
 
-def put_mentor_scoring(connection,mentor_id, team_id, team_score):
+def put_mentor_scoring(mentor_id, team_id, team_score):
     """Inserts mentor scoring data into the database."""
     statement = f"""
     
@@ -167,10 +153,9 @@ def put_mentor_scoring(connection,mentor_id, team_id, team_score):
         END;
     
     """
-    execute_sql_statement(connection, statement)
-    disconnect_from_database(connection)
+    execute_sql_statement( statement)
 
-def put_judge_scoring(connection,team_id, judge_id, score):
+def put_judge_scoring(team_id, judge_id, score):
     """Inserts judge scoring data into the database."""
     statement = f"""
     
@@ -179,10 +164,10 @@ def put_judge_scoring(connection,team_id, judge_id, score):
         END;
     
     """
-    execute_sql_statement(connection, statement)
-    disconnect_from_database(connection)
+    execute_sql_statement( statement)
+    disconnect_from_database()
 
-def put_submissions(connection,teamid,ppt,github):
+def put_submissions(teamid,ppt,github):
     statement = f"""
     
         BEGIN
@@ -190,6 +175,6 @@ def put_submissions(connection,teamid,ppt,github):
         END;
     
     """
-    execute_sql_statement(connection, statement)
-    disconnect_from_database(connection)
+    execute_sql_statement( statement)
+    disconnect_from_database()
 

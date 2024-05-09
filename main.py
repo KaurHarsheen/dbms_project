@@ -11,12 +11,7 @@ password = dotenv.get_key('.env', 'DB_PASSWORD')
 dsn = "172.16.64.222:1522/orclpdb"
 
 
-try:
-    global connection
-    connection = cx_Oracle.connect(user=username, password=password, dsn=dsn)
-    print("Connection to Oracle database established successfully.")
-except cx_Oracle.DatabaseError as e:
-    print("Error connecting to Oracle database:", e)
+
 
 @app.route('/')
 def index():
@@ -24,7 +19,9 @@ def index():
 
 @app.route('/teams')
 def teams():
-    return render_template('teams.html')
+    teamsdata = new.get_teams()
+    teamsdata.sort(key=lambda x: x[0])
+    return render_template('teams.html', teams=teamsdata)
 
 @app.route('/members')
 def members():

@@ -27,17 +27,15 @@
             <tr>
                 <th class="px-4 py-2">Team ID</th>
                 <th class="px-4 py-2">Team Name</th>
-                <th class="px-4 py-2">Extension Allocated</th>
-                <th class="px-4 py-2">Table Number Allocated</th>
+                <th class="px-4 py-2">No. of Members</th>
             </tr>
         </thead>
         <tbody>
             {% for team in teams %}
             <tr>
-                <td class="border px-4 py-2">{{ team.Team_Id }}</td>
-                <td class="border px-4 py-2">{{ team.Team_Name }}</td>
-                <td class="border px-4 py-2">{{ team.Extension_Allocated }}</td>
-                <td class="border px-4 py-2">{{ team.Table_Number_Allocated }}</td>
+                <td class="border px-4 py-2">{{ team[0] }}</td>
+                <td class="border px-4 py-2">{{ team[1] }}</td>
+                <td class="border px-4 py-2">{{ team[2] }}</td>
             </tr>
             {% endfor %}
         </tbody>
