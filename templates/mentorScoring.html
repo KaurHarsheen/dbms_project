@@ -41,9 +41,9 @@
         <tbody>
             {% for mentor_score in mentor_scores %}
             <tr>
-                <td class="border px-4 py-2">{{ mentor_score.Mentor_Id }}</td>
-                <td class="border px-4 py-2">{{ mentor_score.Team_Id }}</td>
-                <td class="border px-4 py-2">{{ mentor_score.Team_Score }}</td>
+                <td class="border px-4 py-2">{{ mentor_score[0] }}</td>
+                <td class="border px-4 py-2">{{ mentor_score[1] }}</td>
+                <td class="border px-4 py-2">{{ mentor_score[2] }}</td>
             </tr>
             {% endfor %}
         </tbody>

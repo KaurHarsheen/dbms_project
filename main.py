@@ -1,14 +1,8 @@
 import new
-from flask import Flask, render_template
+from flask import Flask, render_template,redirect, url_for
 from flask import request
 
 app = Flask(__name__)
-import cx_Oracle
-import dotenv
-
-username = dotenv.get_key('.env', 'DB_USER')
-password = dotenv.get_key('.env', 'DB_PASSWORD')
-dsn = "172.16.64.222:1522/orclpdb"
 
 
 
@@ -25,35 +19,35 @@ def teams():
 
 @app.route('/members')
 def members():
-    return render_template('members.html')
+    memberdata = new.get_members()
+    return render_template('members.html', members = memberdata)
 
 @app.route('/mentorScoring')
 def mentorScoring():
-    return render_template('mentorScoring.html')
+    mentorScoringdata = new.get_mentor_scoring()
+    return render_template('mentorScoring.html', mentor_scores = mentorScoringdata)
 
 @app.route('/judgeScoring')
 def judge_scores_page():
-    return render_template('judgesScoring.html')
+    judge_score_data = new.get_judge_scoring()
+    return render_template('judgesScoring.html', judge_scores = judge_score_data)
 
 @app.route('/finalScores')
 def final_scores_page():
-    return render_template('finalScoresheet.html')
+    final_scores = new.get_final_scores()
+    return render_template('finalScoresheet.html', final_scores = final_scores)
 
 @app.route('/teamSubmission', methods=['GET', 'POST'])
 def team_submissions_page():
-    # if request.method == 'POST':
-    #     team_id = request.form['team_id']
-    #     presentation = request.form['presentation']
-    #     github_link = request.form['github_link']
-    #     mentor_scores = request.form['mentor_scores']
-        # Add submission logic here
-        # For demonstration purposes, let's assume the data is added to the submissions list
-        # submissions.append({'Team_Id': team_id, 'Presentation': presentation, 'Github_Link': github_link, 'Mentor_Scores': mentor_scores})
-    return render_template('submissions.html')
+    submissiondata = new.get_team_submission()
+    return render_template('submissions.html', submissions = submissiondata)
 
 @app.route('/extensions')
 def extensions_page():
-    return render_template('extensions.html')
+    ext = new.get_extensions()
+    tab = new.get_tables()
+    print(ext, tab)
+    return render_template('extensions.html', extension_data = ext, table_data = tab)
 
 
 
@@ -63,6 +57,8 @@ def add_member():
 
 @app.route('/add_team', methods=['POST'])
 def add_team():
-    data = request.get_json()
+    team_name=request.form['team_name']
+    new.put_team(team_name)
+    return redirect(url_for('teams'))
 if __name__ == "__main__":
     app.run(debug=True)

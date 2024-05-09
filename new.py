@@ -30,9 +30,9 @@ def execute_sql_statement( statement):
     print(statement)
     cursor = connection.cursor()
     cursor.execute(statement)
+    connection.commit()
     cursor.close()
     disconnect_from_database(connection)
-    connection.commit()
 
 def get_teams():
     """Retrieves all teams from the database."""
@@ -76,6 +76,13 @@ def get_extensions():
     extensions = execute_sql_query( query)
     return extensions
 
+def get_tables():
+    """Retrieves table data from the database."""
+    query = "SELECT * FROM table_allocation"
+    tables = execute_sql_query( query)
+    print(tables)
+    return tables
+
 def get_checkin():
     """Retrieves check-in data from the database."""
     query = "SELECT * FROM CHECK_INTIME"
@@ -96,20 +103,20 @@ def get_judges():
 
 def put_team(team_name):
     """Inserts a new team into the database."""
+    print(team_name)
     statement = f"""
         BEGIN
             INSERT_TEAM('{team_name}');
         END;
-        
     """
     execute_sql_statement( statement)
 
-def put_member(member_name, email, college_name, ph_no, team_id):
+def put_member(member_id, member_name, email, college_name, ph_no, team_id):
     """Inserts a new member into the database."""
     statement = f"""
     
         BEGIN
-            INSERT MEMBER('{member_name}', '{email}', '{college_name}', '{ph_no}', {team_id});
+            INSERT INTO MEMBER VALUES('{member_id}','{member_name}', '{email}', '{college_name}', '{ph_no}', {team_id});
         END;
     
     """

@@ -61,12 +61,13 @@
     <tbody>
         {% for member in members %}
         <tr>
-            <td class="border px-4 py-2">{{ member.Member_Id }}</td>
-            <td class="border px-4 py-2">{{ member.Member_Name }}</td>
-            <td class="border px-4 py-2">{{ member.Email }}</td>
-            <td class="border px-4 py-2">{{ member.College_Name }}</td>
-            <td class="border px-4 py-2">{{ member.Ph_No }}</td>
-            <td class="border px-4 py-2">{{ member.Team_Id }}</td>
+            <td class="border px-4 py-2">{{ member[0] }}</td>
+            <td class="border px-4 py-2">{{ member[1] }}</td>
+            <td class="border px-4 py-2">{{ member[2] }}</td>
+            <td class="border px-4 py-2">{{ member[3] }}</td>
+            <td class="border px-4 py-2">{{ member[4] }}</td>
+            <td class="border px-4 py-2">{{ member[5] }}</td>
+        </tr>
         </tr>
         {% endfor %}
     </tbody>

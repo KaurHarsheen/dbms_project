@@ -17,8 +17,8 @@
             <tbody>
                 {% for extension in extension_data %}
                 <tr>
-                    <td class="border px-4 py-2">{{ extension.Extention_board_No }}</td>
-                    <td class="border px-4 py-2">{{ extension.Team_Id }}</td>
+                    <td class="border px-4 py-2">{{ extension[0]}}</td>
+                    <td class="border px-4 py-2">{{ extension[1] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -37,8 +37,8 @@
             <tbody>
                 {% for table in table_data %}
                 <tr>
-                    <td class="border px-4 py-2">{{ table.Table_no }}</td>
-                    <td class="border px-4 py-2">{{ table.Team_Id }}</td>
+                    <td class="border px-4 py-2">{{ table[0]}}</td>
+                    <td class="border px-4 py-2">{{ table[1]}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
