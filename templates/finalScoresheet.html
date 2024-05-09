@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Final Scores{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-semibold mb-5">Final Scores</h1>
+
+<!-- Final Scores Table -->
+<div class="mb-8">
+    <h2 class="text-xl font-semibold mb-3">Final Scores Table</h2>
+    <table class="table-auto w-full">
+        <thead>
+            <tr>
+                <th class="px-4 py-2">Team ID</th>
+                <th class="px-4 py-2">Scores</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for final_score in final_scores %}
+            <tr>
+                <td class="border px-4 py-2">{{ final_score.Team_Id }}</td>
+                <td class="border px-4 py-2">{{ final_score.Scores }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
