@@ -18,8 +18,8 @@
         <tbody>
             {% for final_score in final_scores %}
             <tr>
-                <td class="border px-4 py-2">{{ final_score.Team_Id }}</td>
-                <td class="border px-4 py-2">{{ final_score.Scores }}</td>
+                <td class="border px-4 py-2">{{ final_score[0] }}</td>
+                <td class="border px-4 py-2">{{ final_score[1] }}</td>
             </tr>
             {% endfor %}
         </tbody>

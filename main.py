@@ -22,6 +22,12 @@ def members():
     memberdata = new.get_members()
     return render_template('members.html', members = memberdata)
 
+@app.route('/mentor_judges')
+def mentor_judges():
+    mentors = new.get_mentors()
+    judges = new.get_judges()
+    return render_template('mentor_judges.html', mentors = mentors, judges = judges)
+
 @app.route('/mentorScoring')
 def mentorScoring():
     mentorScoringdata = new.get_mentor_scoring()
@@ -53,7 +59,14 @@ def extensions_page():
 
 @app.route('/add_member', methods=['POST'])
 def add_member():
-    data = request.get_json()
+    if request.method == 'POST':
+        team_id = request.form['team_id']
+        member_name = request.form['member_name']
+        email = request.form['email']
+        college_name = request.form['college_name']
+        phone = request.form['phone']
+        new.put_member( member_name,email , college_name, phone, team_id)
+        return redirect(url_for('members'))
 
 @app.route('/add_team', methods=['POST'])
 def add_team():

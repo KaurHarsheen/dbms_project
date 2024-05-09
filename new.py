@@ -111,17 +111,17 @@ def put_team(team_name):
     """
     execute_sql_statement( statement)
 
-def put_member(member_id, member_name, email, college_name, ph_no, team_id):
+def put_member(member_name, email, college_name, ph_no, team_id):
     """Inserts a new member into the database."""
     statement = f"""
     
         BEGIN
-            INSERT_MEMBER('{member_id}','{member_name}', '{email}', '{college_name}', '{ph_no}', {team_id});
+            insert_member('{member_name}', '{email}', '{college_name}', '{ph_no}', {team_id});
         END;
     
     """
     execute_sql_statement( statement)
-    disconnect_from_database()
+    # disconnect_from_database()
 
 def put_mentor(mentor_id, mentor_name, mentor_ph):
     """Inserts a new mentor into the database."""
@@ -172,7 +172,7 @@ def put_judge_scoring(team_id, judge_id, score):
     
     """
     execute_sql_statement( statement)
-    disconnect_from_database()
+    # disconnect_from_database()
 
 def put_submissions(teamid,ppt,github):
     statement = f"""
@@ -183,5 +183,7 @@ def put_submissions(teamid,ppt,github):
     
     """
     execute_sql_statement( statement)
-    disconnect_from_database()
+    # disconnect_from_database()
+
+
 
