@@ -105,9 +105,11 @@ def get_judges():
 
 def put_team(connection,team_name):
     """Inserts a new team into the database."""
-    statement = f"""(BEGIN
-    INSERT_TEAM('f{team_name}');
-    END;)
+    statement = f"""
+        BEGIN
+            INSERT_TEAM('{team_name}');
+        END;
+        
     """
     execute_sql_statement(connection, statement)
     disconnect_from_database(connection)
@@ -115,11 +117,11 @@ def put_team(connection,team_name):
 def put_member(connection,member_name, email, college_name, ph_no, team_id):
     """Inserts a new member into the database."""
     statement = f"""
-    (
+    
         BEGIN
             INSERT MEMBER('{member_name}', '{email}', '{college_name}', '{ph_no}', {team_id});
         END;
-    )
+    
     """
     execute_sql_statement(connection, statement)
     disconnect_from_database(connection)
@@ -139,11 +141,11 @@ def put_judge(connection,judge_id, judge_name):
 def put_checkin(connection,member_id):
     """Inserts a check-in record for a member into the database."""
     statement = f"""
-    (
+    
         BEGIN
             check_in_member({member_id});
         END;
-    )
+    
     """
     execute_sql_statement(connection, statement)
     disconnect_from_database(connection)
@@ -159,11 +161,11 @@ def put_extension(connection,extention_board_no, team_id):
 def put_mentor_scoring(connection,mentor_id, team_id, team_score):
     """Inserts mentor scoring data into the database."""
     statement = f"""
-    (
+    
         BEGIN
             add_mentor_scores({mentor_id},{team_id},{team_score});
         END;
-    )
+    
     """
     execute_sql_statement(connection, statement)
     disconnect_from_database(connection)
@@ -171,22 +173,22 @@ def put_mentor_scoring(connection,mentor_id, team_id, team_score):
 def put_judge_scoring(connection,team_id, judge_id, score):
     """Inserts judge scoring data into the database."""
     statement = f"""
-    (
+    
         BEGIN 
             add_judges_scores({team_id},{judge_id},{score});
         END;
-    )
+    
     """
     execute_sql_statement(connection, statement)
     disconnect_from_database(connection)
 
 def put_submissions(connection,teamid,ppt,github):
     statement = f"""
-    (
+    
         BEGIN
             update_submissions({teamid}, '{ppt}', '{github}');
         END;
-    )
+    
     """
     execute_sql_statement(connection, statement)
     disconnect_from_database(connection)
