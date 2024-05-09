@@ -116,7 +116,7 @@ def put_member(member_id, member_name, email, college_name, ph_no, team_id):
     statement = f"""
     
         BEGIN
-            INSERT INTO MEMBER VALUES('{member_id}','{member_name}', '{email}', '{college_name}', '{ph_no}', {team_id});
+            INSERT_MEMBER('{member_id}','{member_name}', '{email}', '{college_name}', '{ph_no}', {team_id});
         END;
     
     """
