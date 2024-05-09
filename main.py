@@ -1,9 +1,22 @@
-import orcl
+import new
 from flask import Flask, render_template
 from flask import request
 
 app = Flask(__name__)
-cursor = orcl.get_cursor()
+import cx_Oracle
+import dotenv
+
+username = dotenv.get_key('.env', 'DB_USER')
+password = dotenv.get_key('.env', 'DB_PASSWORD')
+dsn = "172.16.64.222:1522/orclpdb"
+
+
+try:
+    global connection
+    connection = cx_Oracle.connect(user=username, password=password, dsn=dsn)
+    print("Connection to Oracle database established successfully.")
+except cx_Oracle.DatabaseError as e:
+    print("Error connecting to Oracle database:", e)
 
 @app.route('/')
 def index():
