@@ -28,6 +28,7 @@ def execute_sql_query(connection, query):
 
 def execute_sql_statement(connection, statement):
     """Executes an SQL statement."""
+    print(statement)
     cursor = connection.cursor()
     cursor.execute(statement)
     cursor.close()
@@ -104,13 +105,22 @@ def get_judges():
 
 def put_team(connection,team_name):
     """Inserts a new team into the database."""
-    statement = f"INSERT INTO TEAM (TEAM_ID, TEAM_NAME) VALUES ((SELECT COALESCE(MAX(TEAM_ID), 0) + 1 FROM TEAM), '{team_name}')"
+    statement = f"""(BEGIN
+    INSERT_TEAM('f{team_name}');
+    END;)
+    """
     execute_sql_statement(connection, statement)
     disconnect_from_database(connection)
 
 def put_member(connection,member_name, email, college_name, ph_no, team_id):
     """Inserts a new member into the database."""
-    statement = f"INSERT INTO MEMBER (Member_Id, Member_Name, Email, College_Name, Ph_No, Team_Id) VALUES ((SELECT COALESCE(MAX(Member_Id), 0) + 1 FROM Member), '{member_name}', '{email}', '{college_name}', '{ph_no}', {team_id})"
+    statement = f"""
+    (
+        BEGIN
+            INSERT MEMBER('{member_name}', '{email}', '{college_name}', '{ph_no}', {team_id});
+        END;
+    )
+    """
     execute_sql_statement(connection, statement)
     disconnect_from_database(connection)
 
@@ -128,25 +138,56 @@ def put_judge(connection,judge_id, judge_name):
 
 def put_checkin(connection,member_id):
     """Inserts a check-in record for a member into the database."""
-    statement = f"INSERT INTO CHECK_INTIME (Member_Id, Check_InTime) VALUES ({member_id}, SYSTIMESTAMP)"
+    statement = f"""
+    (
+        BEGIN
+            check_in_member({member_id});
+        END;
+    )
+    """
     execute_sql_statement(connection, statement)
     disconnect_from_database(connection)
 
 def put_extension(connection,extention_board_no, team_id):
     """Inserts an extension board allocation into the database."""
-    statement = f"INSERT INTO EXTENTION_BOARD_ALLOCATION (Extention_board_No, Team_Id) VALUES ({extention_board_no}, {team_id})"
+
+    statement = f"INSERT INTO extention_Board_Allocation VALUES({extention_board_no},{team_id});"
+
     execute_sql_statement(connection, statement)
     disconnect_from_database(connection)
 
 def put_mentor_scoring(connection,mentor_id, team_id, team_score):
     """Inserts mentor scoring data into the database."""
-    statement = f"INSERT INTO MENTOR_SCORES (Mentor_Id, Team_Id, Team_Score) VALUES ({mentor_id}, {team_id}, {team_score})"
+    statement = f"""
+    (
+        BEGIN
+            add_mentor_scores({mentor_id},{team_id},{team_score});
+        END;
+    )
+    """
     execute_sql_statement(connection, statement)
     disconnect_from_database(connection)
 
 def put_judge_scoring(connection,team_id, judge_id, score):
     """Inserts judge scoring data into the database."""
-    statement = f"INSERT INTO JUDGE_SCORES (Judge_Id, Team_Id, Score) VALUES ({judge_id}, {team_id}, {score})"
+    statement = f"""
+    (
+        BEGIN 
+            add_judges_scores({team_id},{judge_id},{score});
+        END;
+    )
+    """
+    execute_sql_statement(connection, statement)
+    disconnect_from_database(connection)
+
+def put_submissions(connection,teamid,ppt,github):
+    statement = f"""
+    (
+        BEGIN
+            update_submissions({teamid}, '{ppt}', '{github}');
+        END;
+    )
+    """
     execute_sql_statement(connection, statement)
     disconnect_from_database(connection)
 

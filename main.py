@@ -64,24 +64,8 @@ def extensions_page():
 def add_member():
     data = request.get_json()
 
-    # name = data.get('name')
-    # age = data.get('age')
-    # cursor.execute("INSERT INTO members (name, age) VALUES (:name, :age)", {'name': name, 'age': age})
-
-    # cursor.commit()
-
-    # return 'Member added successfully'
-
 @app.route('/add_team', methods=['POST'])
 def add_team():
     data = request.get_json()
-
-    # name = data.get('name')
-    # cursor.execute("INSERT INTO teams (name) VALUES (:name)", {'name': name})
-
-    # cursor.commit()
-
-    # return 'Team added successfully'
-
 if __name__ == "__main__":
     app.run(debug=True)
