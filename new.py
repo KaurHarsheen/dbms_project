@@ -125,7 +125,7 @@ def put_member(member_name, email, college_name, ph_no, team_id):
 
 def put_mentor(mentor_id, mentor_name, mentor_ph):
     """Inserts a new mentor into the database."""
-    statement = f"INSERT INTO MENTORS (Mentor_Id, Mentor_Name, Mentor_Ph) VALUES ({mentor_id}, '{mentor_name}', '{mentor_ph}')"
+    statement = f"INSERT INTO MENTORS VALUES ({mentor_id}, '{mentor_name}', '{mentor_ph}')"
     execute_sql_statement( statement)
 
 def put_judge(judge_id, judge_name):
@@ -184,6 +184,5 @@ def put_submissions(teamid,ppt,github):
     """
     execute_sql_statement( statement)
     # disconnect_from_database()
-
 
 

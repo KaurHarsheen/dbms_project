@@ -31,10 +31,11 @@ def mentor_judges():
 @app.route('/mentorScoring')
 def mentorScoring():
     mentorScoringdata = new.get_mentor_scoring()
+    print(mentorScoringdata)
     return render_template('mentorScoring.html', mentor_scores = mentorScoringdata)
 
 @app.route('/judgeScoring')
-def judge_scores_page():
+def judgeScoring():
     judge_score_data = new.get_judge_scoring()
     return render_template('judgesScoring.html', judge_scores = judge_score_data)
 
@@ -42,6 +43,11 @@ def judge_scores_page():
 def final_scores_page():
     final_scores = new.get_final_scores()
     return render_template('finalScoresheet.html', final_scores = final_scores)
+
+@app.route('/checkin')
+def checkin():
+    checkin = new.get_checkin()
+    return render_template('checkin.html', checkin = checkin)
 
 @app.route('/teamSubmission', methods=['GET', 'POST'])
 def team_submissions_page():
@@ -73,5 +79,30 @@ def add_team():
     team_name=request.form['team_name']
     new.put_team(team_name)
     return redirect(url_for('teams'))
+
+
+@app.route('/checkin', methods=['POST'])
+def checkin_put():
+    member_id=request.form['member_id']
+    new.put_checkin(member_id)
+    return redirect(url_for('members'))
+
+@app.route('/add_mentor_scores', methods=['POST'])
+def add_mentor_scores():
+    mentor_id=request.form['mentor_id']
+    team_id=request.form['team_id']
+    team_score=request.form['score']
+    new.put_mentor_scoring(mentor_id,team_id,team_score)
+    return redirect(url_for('mentorScoring'))
+
+@app.route('/add_judge_scores', methods=['POST'])
+def add_judge_scores():
+    judge_id=request.form['judge_id']
+    team_id=request.form['team_id']
+    team_score=request.form['score']
+    new.put_judge_scoring(team_id,judge_id,team_score)
+    return redirect(url_for('judgeScoring'))
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8080)

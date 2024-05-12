@@ -12,7 +12,9 @@
         <thead>
             <tr>
                 <th class="px-4 py-2">Team ID</th>
-                <th class="px-4 py-2">Scores</th>
+                <th class="px-4 py-2">Mentor Scores</th>
+                <th class="px-4 py-2">Judges Scores</th>
+                <th class="px-4 py-2">Total Scores</th>
             </tr>
         </thead>
         <tbody>
@@ -20,6 +22,8 @@
             <tr>
                 <td class="border px-4 py-2 text-center">{{ final_score[0] }}</td>
                 <td class="border px-4 py-2 text-center">{{ final_score[1] }}</td>
+                <td class="border px-4 py-2 text-center">{{ final_score[2] }}</td>
+                <td class="border px-4 py-2 text-center">{{ final_score[3] }}</td>
             </tr>
             {% endfor %}
         </tbody>
