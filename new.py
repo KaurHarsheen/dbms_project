@@ -3,7 +3,9 @@ import dotenv
 
 username = dotenv.get_key('.env', 'DB_USER')
 password = dotenv.get_key('.env', 'DB_PASSWORD')
-dsn = "172.16.64.222:1522/orclpdb"
+dsn = cx_Oracle.makedsn("localhost", 1521, service_name="XEPDB1")
+connection = cx_Oracle.connect(user=username, password=password, dsn=dsn, encoding="UTF-8")
+
 
 
 

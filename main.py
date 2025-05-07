@@ -51,6 +51,13 @@ def checkin():
 
 @app.route('/teamSubmission', methods=['GET', 'POST'])
 def team_submissions_page():
+    if request.method == 'POST':
+        team_id = request.form['team_id']
+        ppt = request.form['presentation']
+        github = request.form['github_link']
+
+        # Make sure you convert ID to int if needed
+        new.put_submissions(int(team_id), ppt, github)
     submissiondata = new.get_team_submission()
     return render_template('submissions.html', submissions = submissiondata)
 
