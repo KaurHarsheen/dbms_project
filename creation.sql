@@ -284,6 +284,13 @@ BEGIN
     INSERT INTO judge_scores (Judge_id,Team_Id, Score)
     VALUES (p_judge_id,p_team_id, p_scores);
     commit;
+        BEGIN
+        INSERT INTO Final_Scoresheets (Team_Id, Mentor_Score, Judge_Score, Final_Score)
+        VALUES (p_team_id, 0, 0, 0);
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            NULL; -- do nothing, row already exists
+    END;
 	SELECT judge_score,final_score INTO v_judge_score,v_final_score
     FROM Final_scoresheets
     WHERE Team_Id = p_team_id;
@@ -319,6 +326,7 @@ CREATE OR REPLACE PROCEDURE add_mentor_scores (
     v_final_score INT;
     v_total_mentor_score INT;
 BEGIN
+
     -- Insert individual mentor score (avoid duplicates by using MERGE or handle separately)
     INSERT INTO Mentor_scores (Mentor_Id, Team_Id, Team_Score)
     VALUES (p_mentor_id, p_team_id, p_team_score);
@@ -329,6 +337,14 @@ BEGIN
     INTO v_total_mentor_score
     FROM Mentor_scores
     WHERE Team_Id = p_team_id;
+    
+        BEGIN
+        INSERT INTO Final_Scoresheets (Team_Id, Mentor_Score, Judge_Score, Final_Score)
+        VALUES (p_team_id, 0, 0, 0);
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            NULL; -- do nothing, row already exists
+    END;
     -- Get current final score
     SELECT Final_Score INTO v_final_score
     FROM Final_scoresheets
@@ -351,3 +367,6 @@ END add_mentor_scores;
 
 select * from Final_scoresheets;
 
+
+delete from Final_scoresheets;
+commit;
