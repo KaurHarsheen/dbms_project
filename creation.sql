@@ -14,8 +14,6 @@ CREATE TABLE Member(
     PRIMARY KEY (Member_Id),
     FOREIGN KEY (Team_Id) REFERENCES Team(Team_Id) -- Reference to Team table
 );
-
-
 CREATE TABLE Check_InTime (
     Member_Id INT NOT NULL,
     Check_InTime TIMESTAMP,
@@ -27,29 +25,24 @@ CREATE SEQUENCE table_no_sequence
     INCREMENT BY 1
     NOCACHE
     NOCYCLE;
-
 CREATE TABLE Table_Allocation(
     Table_no INT  DEFAULT table_no_sequence.NEXTVAL,
     Team_Id INT NOT NULL,
     PRIMARY KEY (Table_no),
     FOREIGN KEY (Team_Id) REFERENCES Team(Team_Id) -- Reference to Team table
 );
-
 CREATE TABLE Extention_Board_Allocation(
     Extention_board_No INT,
     Team_Id INT,
     PRIMARY KEY (Extention_board_No),
     FOREIGN KEY (Team_Id) REFERENCES Team(Team_Id) -- Reference to Team table
 );
-
 CREATE TABLE Mentors(
     Mentor_Id INT NOT NULL,
     Mentor_Name VARCHAR(200),
     Mentor_Ph VARCHAR(12),
     PRIMARY KEY (Mentor_Id)
 );
-insert into mentors values(1, 'Lovish',9874563254);
-insert into mentors values(2, 'Daras',851095566);
 CREATE TABLE Mentor_scores(
     Mentor_Id INT NOT NULL,
     Team_Id INT,
@@ -64,14 +57,11 @@ CREATE TABLE Submissions(
     PRIMARY KEY (Team_Id),
     FOREIGN KEY (Team_Id) REFERENCES Team(Team_Id) -- Reference to Team table
 );
-
 CREATE TABLE Judges (
     Judge_Id INT NOT NULL,
     Judge_Name VARCHAR(200),
     PRIMARY KEY (Judge_Id)
 );
-insert into judges values(1,'Dr. Prashant Singh Rana');
-
 CREATE TABLE Judge_Scores (
     Judge_Id INT NOT NULL,
     Team_Id INT NOT NULL,
@@ -80,7 +70,6 @@ CREATE TABLE Judge_Scores (
     FOREIGN KEY (Judge_Id) REFERENCES Judges(Judge_Id),
     FOREIGN KEY (Team_Id) REFERENCES Team(Team_Id)
 );
-
 CREATE TABLE Final_scoresheets (
     Team_Id INT NOT NULL,
     Mentor_Score INT,
@@ -89,10 +78,13 @@ CREATE TABLE Final_scoresheets (
     PRIMARY KEY (Team_Id),
     FOREIGN KEY (Team_Id) REFERENCES Team(Team_Id)
 );
---CREATE SEQUENCE table_no_sequence
---START WITH 1
---INCREMENT BY 1;
---
+
+insert into mentors values(1, 'Mentor 1',9625375211);
+insert into mentors values(2, 'Mentor 2',851095566);
+insert into mentors values(3, 'Mentor 3',9650875377);insert into judges values(1,'Judge 1');
+insert into judges values(2,'Judge 2');
+
+SET SERVEROUTPUT ON;
 
 CREATE OR REPLACE PROCEDURE insert_team (
     p_team_name IN VARCHAR2
@@ -113,8 +105,10 @@ END insert_team;
 
 BEGIN
     INSERT_TEAM('RUNTIME TERROR');
+    INSERT_TEAM('RTFM');
 END;
 /
+SELECT * FROM TEAM;
 
 CREATE OR REPLACE PROCEDURE insert_member (
     p_member_name IN member.member_name%TYPE,
@@ -147,9 +141,13 @@ EXCEPTION
 END insert_member;
 /
 BEGIN
-    insert_member('Hushraj Singh', 'hushraj@gmail.com', 'Thapar University', '8796541256', 1);
+    --insert_member('Harsheen Kaur', 'harsheen@gmail.com', 'Thapar University', '8796541256', 1);
+    insert_member('Asmita', 'asmita@gmail.com', 'Thapar University', '8996841206', 1);
+    insert_member('Parth', 'parth@gmail.com', 'Thapar University', '9933308588', 2);
+    insert_member('Rohit', 'rohit@gmail.com', 'Thapar University', '8446541446', 2);
 END;
 /
+SELECT * FROM MEMBER;
 
     
 CREATE OR REPLACE PROCEDURE update_extention_board_status (
@@ -168,11 +166,12 @@ EXCEPTION
 END update_extention_board_status;
 /
 BEGIN
-    update_extention_board_status(1,1);
+    --update_extention_board_status(1,1);
+    update_extention_board_status(2,2);
 END;
 /
     
-
+select * from extention_Board_Allocation;
 CREATE OR REPLACE PROCEDURE check_in_member (
     p_member_id IN INT
 ) AS
@@ -208,9 +207,14 @@ END check_in_member;
 /
 
 BEGIN
-    check_in_member(1);
+    --check_in_member(1);
+    check_in_member(2);
+    check_in_member(3);
+    check_in_member(4);
 END;
 /
+
+select * from check_intime;
 
 CREATE OR REPLACE PROCEDURE update_submissions (
     p_team_id IN INT,
@@ -232,46 +236,12 @@ END update_submissions;
 /
 
 BEGIN
-    update_submissions(1, 'https://drive.google.com/ppt1', 'https://github.com/team_repo');
+    --update_submissions(1, 'https://drive.google.com/ppt1', 'https://github.com/team_repo');
+    update_submissions(2, 'https://drive.google.com/ppt2', 'https://github.com/our_repo');
 END;
 /
+select * from submissions;
 
-CREATE OR REPLACE PROCEDURE add_mentor_scores (
-    p_mentor_id IN INT,
-    p_team_id IN INT,
-    p_team_score IN INT
-) AS
-    v_final_score INT;
-	v_mentor_score INT;
-BEGIN
-    INSERT INTO Mentor_scores (Mentor_Id, Team_Id, Team_Score)
-    VALUES (p_mentor_id, p_team_id, p_team_score);
-    commit;
-    SELECT mentor_score,final_score INTO v_mentor_score,v_final_score
-    FROM Final_scoresheets
-    WHERE Team_Id = p_team_id;
-    
-    v_mentor_score := v_mentor_score + p_team_score;
-v_final_score := v_final_score + p_team_score;
-    
-    UPDATE Final_scoresheets
-    SET Mentor_Score = v_mentor_score,
-        Final_Score = v_final_score
-    WHERE Team_Id = p_team_id;
-    
-    COMMIT;
-    DBMS_OUTPUT.PUT_LINE('Mentor scores added successfully and Final_scoresheets updated.');
-EXCEPTION
-    WHEN OTHERS THEN
-        ROLLBACK;
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END add_mentor_scores;
-/
-begin
-    add_mentor_scores(1,1,20);
-end;
-/
-    
 
 CREATE OR REPLACE PROCEDURE add_judges_scores (
     p_team_id IN INT,
@@ -312,11 +282,12 @@ END add_judges_scores;
 /
 
 begin 
-	add_judges_scores(1,1,88);
+	--add_judges_scores(1,1,88);
+    add_judges_scores(1,2,80);
+    add_judges_scores(2,1,93);
+    add_judges_scores(1,2,72);
 end;
 /
-
-select * from mentors;
 
 CREATE OR REPLACE PROCEDURE add_mentor_scores (
     p_mentor_id IN INT,
@@ -365,8 +336,23 @@ EXCEPTION
 END add_mentor_scores;
 /
 
-select * from Final_scoresheets;
+begin
+    --add_mentor_scores(1,1,20);
+    --add_mentor_scores(2,1,40);
+    add_mentor_scores(3,3,70);
+    --add_mentor_scores(3,1,50);
+end;
+/
 
 
-delete from Final_scoresheets;
-commit;
+select * from judge_scores;
+select * from mentor_scores;
+select * from final_scoresheets;
+
+select * from team;
+select * from member;
+
+--select * from mentors;
+--select * from judges;
+
+
